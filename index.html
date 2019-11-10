@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+    <head>
+        <title> Sorting Algorithms </title>
+        <script src="js/lib/jquery-3.4.1.min.js"></script>
+        <script src="js/lib/bootstrap.min.js"> </script>
+        <link href="css/lib/bootstrap.min.css" rel="stylesheet">
+        <style>
+            .compare {
+                color: #add8e6
+            }
+            .swap{
+                color: #64e764
+            }
+        </style>
+    </head>
+    <body>
+        <div class='container-fluid'>
+            <div class='row'>
+                <!-- side panel-->
+                <div class='col-xs-3' id='sidebar'>
+                    <div class='form-group'>
+                        <label for='#arrSize'>Array size</label>
+                        <input id='arrSize' class='form-control' type='number' value="25"/>
+                    </div>
+                    <div class="form-group">
+                        <label for='#algoSelect'>Algorithm</label>
+                        <select class='form-control'id='algoSelect'>    
+                            <option value='bubble'>Bubble Sort</option>
+                            <option value='selection'>Selection Sort</option>
+                            <option value='insertion'>Insertion Sort</option>
+                            <option value='quick'>Quick Sort</option>
+                            <option value='heap'>Heap Sort</option>
+                            <option value='merge'>Merge Sort</option>
+                        </select>
+                    </div>
+                    <div class='text-center'>
+                        <button class='btn btn-lg btn-primary' id='start'>Start</button>
+                    </div>
+                </div>
+                <!-- canvas-->
+                <div class='col-xs-9' id='canvas-div'>
+                        <canvas width="800px" height="600px" id="main-canvas">
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
