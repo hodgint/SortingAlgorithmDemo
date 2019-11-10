@@ -14,10 +14,16 @@
         </style>
     </head>
     <body>
+        <div class='nav'>
+            <nav class="navbar navbar-dark bg-dark">
+                <span class="navbar-brand mb-0 h1">Sorting Algorithms</span>
+                </nav>  
+            </nav>
+        </div>
         <div class='container-fluid'>
             <div class='row'>
-                <!-- side panel-->
-                <div class='col-xs-3' id='sidebar'>
+                <!-- Left side panel-->
+                <div class='col-xs-3' id='sidebar' style="padding-left: 20px;">
                     <div class='form-group'>
                         <label for='#arrSize'>Array size</label>
                         <input id='arrSize' class='form-control' type='number' value="25"/>
@@ -37,10 +43,21 @@
                         <button class='btn btn-lg btn-primary' id='start'>Start</button>
                     </div>
                 </div>
-                <!-- canvas-->
+                <!-- Canvas-->
                 <div class='col-xs-9' id='canvas-div'>
                         <canvas width="800px" height="600px" id="main-canvas">
                 </div>
+                <!-- Right sidebar -->
+                <div class='col-xs-3' id='explanation'>
+                    <div class='container'>
+                        <p id='explanationPara'> explain stuff</p>
+                    </div>
+                    <div class='container' id='code'>
+                        <p> Algorithm </p>
+                        <span class='border'>
+                            <code id='codeSnippet'>code stuff</code> 
+                        </span>
+                    </div>
             </div>
         </div>
     </body>
