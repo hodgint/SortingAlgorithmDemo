@@ -157,11 +157,25 @@ var sort = (function(){
         }
     }
 
+    function selectionSort(arr){
+        var size = arr.length();
+        for(var i = 0; i < size - 1; i++){
+            var minJ = i;
+            for(var j = i; j < size; j++){
+                if(arr.lessThan(j, minJ)){
+                    minJ = j;
+                }
+            }
+            arr.swap(i, minJ);
+        }
+    }
+
     /*
     * Stores references to each sort algorithm
     */
     var algorithms = {
-        'bubble': bubbleSort
+        'bubble': bubbleSort,
+        'selection': selectionSort,
     }
 
     /* 
