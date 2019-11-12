@@ -3,13 +3,14 @@
         <title> Sorting Algorithms </title>
         <script src="js/lib/jquery-3.4.1.min.js"></script>
         <script src="js/lib/bootstrap.min.js"> </script>
+        <script src='js/sort.js'></script>
         <link href="css/lib/bootstrap.min.css" rel="stylesheet">
         <style>
             .compare {
-                color: #add8e6
+                color: #008000
             }
             .swap{
-                color: #64e764
+                color: #FF0000
             }
         </style>
     </head>
@@ -39,6 +40,10 @@
                             <option value='merge'>Merge Sort</option>
                         </select>
                     </div>
+                    <div class='form-group'>
+                            <label for='#interval'>Interval (ms)</label>
+                            <input id='interval' class='form-control' type='number' value="20"/>
+                          </div>
                     <div class='text-center'>
                         <button class='btn btn-lg btn-primary' id='start'>Start</button>
                     </div>
@@ -61,12 +66,25 @@
             </div>
         </div>
         <script> 
-        var mainArr = null;
-        $('#start').click(function(){
-            var arrSize = parseInt($('#arrSize').val());
-            var alg =  $('#algoSelect').val();
+        $(function(){
+            var mainArr = null;
+            $('#start').click(function(){
+                var arrSize = parseInt($('#arrSize').val());
+                console.log('arrSize: ' + arrSize);
+                var interval = parseInt($('#interval').val());
+                var alg =  $('#algoSelect').val();
+                console.log('alg: ' + alg);
+                var sortFunction = sort.getAlgo(alg);
+                var arr = [];
+                for(var i = 0; i < arrSize; i++){
+                    arr.push(Math.random()); 
+                }
+              //  console.log("arr: " + arr)
+                var canvas = document.getElementById('main-canvas')
+                mainArr = new sort.animateArr(arr, canvas, interval);
+                sortFunction(mainArr);
+            });
         });
-     
         </script>
     </body>
 </html>

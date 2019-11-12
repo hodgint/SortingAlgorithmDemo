@@ -26,10 +26,10 @@ var sort = (function(){
     */
    function drawArray(arr, canvas, colors){
         /* canvas setup */
-        var context = canvas.context('2d');
+        var context = canvas.getContext('2d');
         var width = 2;
         var size = arr.length;
-        var spacing = canvas.width / ( width * n + n + 1);
+        var spacing = canvas.width / ( width * size + size + 1);
         var barWidth = spacing * width; 
 
         /* find min/max */
@@ -46,21 +46,23 @@ var sort = (function(){
            var b = canvas.height / (max - min);
            return a * y + b;
        }
-
+       var yZero = boundY(0);
+       context.beginPath();
+       context.moveTo(0, yZero);
+       context.lineTo(canvas.width, yZero);
+       context.stroke();
         /* canvas border */
-        context.strokeRect(0,0,canvas.width, canvas.height);
+        context.strokeRect(0,0, canvas.width, canvas.height);
+  
+        
         /* draw boxes */
         var x = spacing;
-        context.beginPath()
-        context.moveTo(0,0);
-        context.lineTo(canvas.width, 0);
-        for(var i = 0; i < size; i++){
+        for(var i = 0; i < arr.length; i++){
             context.fillStyle = colors[i];
             var y = boundY(arr[i]);
-            context.fillRect(x, y, barwidth, 0, )
+            context.fillRect(x, y, barWidth, yZero - y)
+            x  += spacing + barWidth
         }
-        x  = x + spacing + barWidth
-
     }
 
     /*
@@ -69,7 +71,7 @@ var sort = (function(){
     * - arr: an array of numbers
     * - canvas: DOM object where we draw
     */
-    function animateArr(arr, canvas){
+    function animateArr(arr, canvas, interval){
         this._arr = arr;
         this._canvas = canvas;
         this._displayArr = [];
@@ -80,20 +82,25 @@ var sort = (function(){
             this._colors.push(DEFAULT_COLOR);
         }
         drawArray(this._arr, this._canvas, this._colors);
-        animateArr.prototype._swap = function(i, j){
+        var _this = this;
+        this._id = window.setInterval(function() {_this._step();}, 25);
+        animateArr.prototype.stop = function(){
+            window.clearInterval(this._id);
+        }
+        animateArr.prototype.swap = function(i, j){
             this._actions.push(['swap', i, j]);
             var temp = arr[i];
             arr[i] = arr[j]
             arr[j] = temp;
         }
-        animateArr.prototype._compare = function(i, j){
+        animateArr.prototype.compare = function(i, j){
             this._actions.push(['compare', i, j])
             return arr[i] - arr[j];
         }
-        animateArr.prototype.greaterThan = funciton(i, j){
+        animateArr.prototype.greaterThan = function(i, j){
             return this.compare(i, j) > 0;
         }
-        animateArr.prototype.lessThan = funciton(i, j){
+        animateArr.prototype.lessThan = function(i, j){
             return this.compare(i, j) < 0;
         }
         animateArr.prototype._step = function(){
@@ -110,13 +117,16 @@ var sort = (function(){
             } else if (action[0] === 'compare'){
                 this._colors[i] = COMPARE_COLOR;
                 this._colors[j] = COMPARE_COLOR;
-                var temo = this.displayArr[i];
-                this._displayArr[i] = this.displayArr[j];
-                this.displayArr[j] = temp;
+                var temp = this._displayArr[i];
+                this._displayArr[i] = this._displayArr[j];
+                this._displayArr[j] = temp;
             }
             drawArray(this._displayArr, this._canvas, this._colors);
             this._colors[i] = DEFAULT_COLOR;
             this._colors[j] = DEFAULT_COLOR;
+        }
+        animateArr.prototype.length = function(){
+            return this._arr.length;
         }
     }
 
@@ -149,11 +159,12 @@ var sort = (function(){
     * - arr: an array of numbers
     */
    function bubbleSort(arr) {
-        var size = arr.length;
+       console.log('in bubble')
+        var size = arr.length();
         for(var i = 0; i < size; i++){
             for(var j = 0; j < size - i - 1; j++){
-                if(compare(arr,j+1, j) < 0){
-                    swap(arr, j, j+1);
+                if(arr.compare(arr,j+1, j) < 0){
+                    arr.swap(arr, j, j+1);
                 }
             }
         }
@@ -161,9 +172,15 @@ var sort = (function(){
     var algorithms = {
         'bubble': bubbleSort
     }
-
-    return {
-        animatArr: animateArr,
-        algorithms: algorithms
+    function getAlgo(algo){
+        var sort = algorithms[algo]
+        return sort; 
     }
+    return {
+        'animateArr': animateArr,
+        'getAlgo': getAlgo,
+        'algorithms': algorithms,
+        'randInt': randInt
+    }
+    return _sort;
 })();
