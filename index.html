@@ -79,6 +79,10 @@
                     arr.push(Math.random()); 
                 }
                 var canvas = document.getElementById('main-canvas')
+                var explain = sort.getExplaination(alg);
+                $('#explanationPara').text(explain);
+                var code = sort.getCode(alg);
+                $('#codeSnippet').text(code);
                 mainArr = new sort.animateArr(arr, canvas, interval);
                 sortFunction(mainArr);
             });

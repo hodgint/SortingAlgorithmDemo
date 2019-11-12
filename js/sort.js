@@ -11,7 +11,6 @@ var sort = (function(){
     const SWAP_COLOR = '#FF0000';
     const COMPARE_COLOR = '#008000'
 
-
     /*
     * Returns a random number between two given numbers
     * Inputs:
@@ -177,6 +176,13 @@ var sort = (function(){
         'bubble': bubbleSort,
         'selection': selectionSort,
     }
+    var explaination = {
+        'bubble': 'Bubble sort is a basic sorting algorithm that loops through the array twice comparing the current item and the next item. if the next item is smaller, it will swap the two values. It runs in O(n^2) as we loop through the array n(n-1)/2 times time and O(1) space complexity as we only need to store the array and a temp variable',
+    }
+
+    var code = {
+        'bubble': 'sudo code for bubble sort',
+    }
 
     /* 
     * Gets the sorting algorithm 
@@ -186,9 +192,18 @@ var sort = (function(){
         return sort; 
     }
 
+    function getExplaination(alg){
+        return explaination[alg]
+    }
+    function getCode(alg){
+        return code[alg]
+    }
+
     return {
         'animateArr': animateArr,
         'getAlgo': getAlgo,
+        'getExplaination': getExplaination,
+        'getCode': getCode,
         'algorithms': algorithms,
         'randInt': randInt
     }
