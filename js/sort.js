@@ -1,5 +1,12 @@
+/************************************
+ * File: sort.js
+ * Name: Travis Hodgin
+ * Desc: Calculates and displays 
+ *       several sorting algorithms
+ ************************************/
 var sort = (function(){
 
+    /* Colors Hex codes */
     const DEFAULT_COLOR = '#777';
     const SWAP_COLOR = '#FF0000';
     const COMPARE_COLOR = '#008000'
@@ -31,7 +38,8 @@ var sort = (function(){
         var size = arr.length;
         var spacing = canvas.width / ( width * size + size + 1);
         var barWidth = spacing * width; 
-
+        
+        context.clearRect(0,0, canvas.width, canvas.height);
         /* find min/max */
         var min = arr[0];
         var max = arr[0];
@@ -46,15 +54,16 @@ var sort = (function(){
            var b = canvas.height / (max - min);
            return a * y + b;
        }
+
        var yZero = boundY(0);
        context.beginPath();
        context.moveTo(0, yZero);
        context.lineTo(canvas.width, yZero);
        context.stroke();
+       
         /* canvas border */
         context.strokeRect(0,0, canvas.width, canvas.height);
   
-        
         /* draw boxes */
         var x = spacing;
         for(var i = 0; i < arr.length; i++){
@@ -83,19 +92,24 @@ var sort = (function(){
         }
         drawArray(this._arr, this._canvas, this._colors);
         var _this = this;
-        this._id = window.setInterval(function() {_this._step();}, 25);
+        this._id = window.setInterval(function() {_this._step();}, interval);
+
+        /* Utility functions */
         animateArr.prototype.stop = function(){
             window.clearInterval(this._id);
         }
+        animateArr.prototype.length = function(){
+            return this._arr.length;
+        }
         animateArr.prototype.swap = function(i, j){
             this._actions.push(['swap', i, j]);
-            var temp = arr[i];
-            arr[i] = arr[j]
-            arr[j] = temp;
+            var t = this._arr[i];
+            this._arr[i] = this._arr[j]
+            this._arr[j] = t;
         }
         animateArr.prototype.compare = function(i, j){
             this._actions.push(['compare', i, j])
-            return arr[i] - arr[j];
+            return this._arr[i] - this._arr[j];
         }
         animateArr.prototype.greaterThan = function(i, j){
             return this.compare(i, j) > 0;
@@ -113,69 +127,51 @@ var sort = (function(){
             var j = action[2];
             if(action[0] === 'swap'){
                 this._colors[i] = SWAP_COLOR;
-                this._colors[j] = SWAP_COLOR;  
-            } else if (action[0] === 'compare'){
-                this._colors[i] = COMPARE_COLOR;
-                this._colors[j] = COMPARE_COLOR;
+                this._colors[j] = SWAP_COLOR;
                 var temp = this._displayArr[i];
                 this._displayArr[i] = this._displayArr[j];
-                this._displayArr[j] = temp;
+                this._displayArr[j] = temp;  
+            } else if (action[0] === 'compare'){
+               this._colors[i] = COMPARE_COLOR;
+                this._colors[j] = COMPARE_COLOR;
             }
             drawArray(this._displayArr, this._canvas, this._colors);
             this._colors[i] = DEFAULT_COLOR;
             this._colors[j] = DEFAULT_COLOR;
         }
-        animateArr.prototype.length = function(){
-            return this._arr.length;
-        }
+    
     }
 
-    /*
-    * Returns the difference between
-    * two elements in the given array
-    * Inputs: 
-    * - arr: an array of numbers
-    * - i: first element to compare
-    * - j: second element to compare
-    */
-    function compare(arr, i, j){
-        return arr[i] - arr[j];
-    }
-
-    /*
-    * Swaps two elements in the given array
-    * Inputs:
-    * - arr: an array of numbers
-    * - i: first element to swap
-    * - j: second element to swap
-    */
-    function swap(arr, i, j){
-        var temp = arr[i];
-        arr[i] = arr[j]
-        arr[j] = temp;
-    }
     /* 
     * Sorts given array using bubble sort
     * - arr: an array of numbers
     */
    function bubbleSort(arr) {
-       console.log('in bubble')
         var size = arr.length();
         for(var i = 0; i < size; i++){
             for(var j = 0; j < size - i - 1; j++){
-                if(arr.compare(arr,j+1, j) < 0){
-                    arr.swap(arr, j, j+1);
+                if(arr.lessThan(j+1, j)){
+                    arr.swap(j, j+1);
                 }
             }
         }
     }
+
+    /*
+    * Stores references to each sort algorithm
+    */
     var algorithms = {
         'bubble': bubbleSort
     }
+
+    /* 
+    * Gets the sorting algorithm 
+    */
     function getAlgo(algo){
         var sort = algorithms[algo]
         return sort; 
     }
+
     return {
         'animateArr': animateArr,
         'getAlgo': getAlgo,
