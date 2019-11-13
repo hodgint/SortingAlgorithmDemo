@@ -6,5 +6,8 @@ This is hosted [Here](https://hodgint.github.io/SortingAlgorithmDemo/)
 Currently the supported sorting algorithms are
 - Bubble Sort
 - Selection Sort
+- Insertion Sort
+
+Bubble Sort Example: 
 
 ![Sorting](https://media.giphy.com/media/JrpmQzsyb02GC3MHfJ/giphy.gif)

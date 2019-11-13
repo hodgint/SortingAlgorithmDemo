@@ -169,13 +169,24 @@ var sort = (function(){
         }
     }
 
+    function insertionSort(arr){
+        var size = arr.length();
+        for(var i = 1; i < size; i++){
+           for(var j = i; j > 0 && arr.lessThan(j, j-1); j--){
+                arr.swap(j, j-1);
+            } 
+        }
+    }
+
     /*
     * Stores references to each sort algorithm
     */
     var algorithms = {
         'bubble': bubbleSort,
         'selection': selectionSort,
+        'insertion': insertionSort,
     }
+
     var explaination = {
         'bubble': 'Bubble sort is a basic sorting algorithm that loops through the array twice comparing the current item and the next item. if the next item is smaller, it will swap the two values. It runs in O(n^2) as we loop through the array n(n-1)/2 times time and O(1) space complexity as we only need to store the array and a temp variable',
     }
