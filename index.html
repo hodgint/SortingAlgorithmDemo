@@ -24,7 +24,7 @@
         <div class='container-fluid'>
             <div class='row'>
                 <!-- Left side panel-->
-                <div class='col-xs-3' id='sidebar' style="padding-left: 20px;">
+                <div class='col-xs-3' id='sidebar' style="padding: 20px;">
                     <div class='form-group'>
                         <label for='#arrSize'>Array size</label>
                         <input id='arrSize' class='form-control' type='number' value="25"/>
@@ -35,14 +35,14 @@
                             <option value='bubble'>Bubble Sort</option>
                             <option value='selection'>Selection Sort</option>
                             <option value='insertion'>Insertion Sort</option>
-                            <option value='quick'>Quick Sort</option>
-                            <option value='heap'>Heap Sort</option>
-                            <option value='merge'>Merge Sort</option>
+                            <!-- <option value='quick'>Quick Sort</option> -->
+                            <!-- <option value='heap'>Heap Sort</option> -->
+                            <!-- <option value='merge'>Merge Sort</option> -->
                         </select>
                     </div>
                     <div class='form-group'>
                             <label for='#interval'>Interval (ms)</label>
-                            <input id='interval' class='form-control' type='number' value="20"/>
+                            <input id='interval' class='form-control' type='number' value="25"/>
                           </div>
                     <div class='text-center'>
                         <button class='btn btn-lg btn-primary' id='start'>Start</button>
@@ -53,12 +53,13 @@
                         <canvas width="800px" height="600px" id="main-canvas">
                 </div>
                 <!-- Right sidebar -->
-                <div class='col-xs-3' id='explanation'>
+                <div class='col-xs-3' id='explanation'  style="width:800px">
                     <div class='container'>
+                        <h3 style="text-decoration: underline;">Explanation</h3>
                         <p id='explanationPara'> explain stuff</p>
                     </div>
                     <div class='container' id='code'>
-                        <p> Algorithm </p>
+                            <h3 style="text-decoration: underline;">Sudo Code</h3>
                         <span class='border'>
                             <code id='codeSnippet'>code stuff</code> 
                         </span>

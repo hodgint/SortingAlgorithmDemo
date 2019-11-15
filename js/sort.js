@@ -5,6 +5,10 @@
  *       several sorting algorithms
  ************************************/
 var sort = (function(){
+    function nl2br (str, is_xhtml) {
+        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+     } 
 
     /* Colors Hex codes */
     const DEFAULT_COLOR = '#777';
@@ -177,6 +181,24 @@ var sort = (function(){
             } 
         }
     }
+    
+    function mergeSort(arr, left, right){
+        if(left === null){
+            left = 0
+        }
+        if(right === null){
+            right = arr.length() - 1;
+        }
+        if(left >= right){
+            return
+        }
+
+        var mid = Math.floor((left + right) / 2);
+        if(right - left > 1){
+            mergeSort(arr, left, mid);
+            mergeSort(ar. mid+1, right);
+        }
+    }
 
     /*
     * Stores references to each sort algorithm
@@ -191,8 +213,13 @@ var sort = (function(){
         'bubble': 'Bubble sort is a basic sorting algorithm that loops through the array twice comparing the current item and the next item. if the next item is smaller, it will swap the two values. It runs in O(n^2) as we loop through the array n(n-1)/2 times time and O(1) space complexity as we only need to store the array and a temp variable',
     }
 
+    var bubble = "BubbleSort(array): for i to n \nfor j to n-i-1 \n    if array[j] > arr[j+1] \n      swap(array[j] ,array[j+1]";
     var code = {
-        'bubble': 'sudo code for bubble sort',
+        'bubble': nl2br("BubbleSort(array):\n\
+            for i to n \r\
+            for j to n-i-1 \n\t\
+            if array[j] > arr[j+1] \n\
+            swap(array[j] ,array[j+1]"),
     }
 
     /* 
