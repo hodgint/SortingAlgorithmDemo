@@ -181,12 +181,62 @@ var sort = (function(){
             } 
         }
     }
+
+
+    function checkPerm(perm){
+        var size = perm.length;
+        var used = {};
+        for(var i = 0; i < size; i++){
+            if(used[perm[i]]){
+                return false;
+            }
+            used[perm[i]] = true;
+        }
+        for(var i = 0; i < size; i++){
+            if(!used[i]){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /* Permutation to transpositions */
+    function permSwap(perm){
+        console.log('PERM: ');
+        console.log(perm);
+        if(!checkPerm(perm)){
+            console.log(perm);
+            throw " Invalid permutaion"
+        }
+        var size = perm.length;
+        var used = [];
+        for(var i = 0; i < size; i++){
+            used.push(false);
+        }
+        var trans = [];
+
+        for(var i = 0; i < size; i++){
+            if(used[i]) continue
+            var curr = i;
+            if(perm[i] == i){
+                used[i] = true;
+            }
+            while(!used[perm[curr]]){
+                trans.push([curr, perm[curr]]);
+                used[curr] = true;
+                curr = perm[curr];
+            }
+        }
+        return trans;
+
+    }
     
     function mergeSort(arr, left, right){
-        if(left === null){
+        console.log('-- IN MERGE');
+        if(typeof(left) === null){
             left = 0
         }
-        if(right === null){
+        if(typeof(right) === null){
             right = arr.length() - 1;
         }
         if(left >= right){
@@ -196,7 +246,40 @@ var sort = (function(){
         var mid = Math.floor((left + right) / 2);
         if(right - left > 1){
             mergeSort(arr, left, mid);
-            mergeSort(ar. mid+1, right);
+            mergeSort(arr, mid+1, right);
+        }
+
+        var nextLeft = left;
+        var nextRight = mid+1;
+        var perm = [];
+        for(var i = left; i <= right; i++){
+            console.log('in choice');
+            var choice = null;
+            if(nextLeft <= mid && nextRight <= right){
+                if(arr.lessThan(nextleft, nextRight)){
+                    choice = 'L';
+                }else{
+                    choice = 'R';
+                }
+            } else if(nextLeft > mid){
+                choice = 'R'
+            } else if(nextRight > right){
+                choice = 'L'
+            }
+            if(choice === 'L'){
+                perm.push(nextLeft - left);
+                nextLeft++;
+            } else if(choice === 'R'){
+                perm.push(nextRight - left);
+                nextRight++;
+            } else {
+                throw 'NO PERMUTATIONS'
+            }
+        }
+        var swaps = permSwap(perm);
+        for(var i = 0; i < swaps.length; i++){
+            console.log('- SWAPING');
+            arr.swap(swaps[i][0] + left, swaps[i][1] + left);
         }
     }
 
@@ -207,6 +290,7 @@ var sort = (function(){
         'bubble': bubbleSort,
         'selection': selectionSort,
         'insertion': insertionSort,
+        'merge': mergeSort,
     }
 
     var explaination = {
@@ -215,11 +299,7 @@ var sort = (function(){
 
     var bubble = "BubbleSort(array): for i to n \nfor j to n-i-1 \n    if array[j] > arr[j+1] \n      swap(array[j] ,array[j+1]";
     var code = {
-        'bubble': nl2br("BubbleSort(array):\n\
-            for i to n \r\
-            for j to n-i-1 \n\t\
-            if array[j] > arr[j+1] \n\
-            swap(array[j] ,array[j+1]"),
+        'bubble': bubble.toString(),
     }
 
     /* 
@@ -243,7 +323,6 @@ var sort = (function(){
         'getExplaination': getExplaination,
         'getCode': getCode,
         'algorithms': algorithms,
-        'randInt': randInt
     }
     return _sort;
 })();
