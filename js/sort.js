@@ -296,7 +296,10 @@ var sort = (function(){
     }
 
     var explaination = {
-        'bubble': 'Bubble sort is a basic sorting algorithm that loops through the array twice comparing the current item and the next item. if the next item is smaller, it will swap the two values. It runs in O(n^2) as we loop through the array n(n-1)/2 times time and O(1) space complexity as we only need to store the array and a temp variable',
+        'bubble': 'Bubble sort is a basic sorting algorithm that loops through the array twice comparing the current item and the next item. if the next item is smaller, it will swap the two values. It runs in average O(n^2) as we loop through the array n(n-1)/2 times time and O(1) space complexity as we only need to store the array and a temp variable',
+        'selection': 'Selection sort sorts by repeatedly finding the minimum element from the array and putting it at the beggining. This way it selects the element to put in the beggining. it has O(n^2) average time complexity.',
+        'insertion': 'Insertion sort builds a final array one item at a time. It iterates through the array looking for where the element should be inserted one at a time. It has O(n^2) average time complexity',
+        'merge': 'Merge sort is a divide and conquer algorithm that divides the array into several sub arrays, sorts those, and then merges them back together. This is done recursivly, and as such has an O(logn) time complexity. ',
     }
 
     var bubble = "BubbleSort(array): \n  for i to n: \n    for j to n-i-1: \n     if array[j] > arr[j+1] \n      swap(array[j] ,array[j+1])";
