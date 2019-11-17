@@ -10,7 +10,7 @@ var sort = (function(){
     /* Colors Hex codes */
     const DEFAULT_COLOR = '#777';
     const SWAP_COLOR = '#FF0000';
-    const COMPARE_COLOR = '#008000'
+    const COMPARE_COLOR = '#008000';
 
     /*
     * Returns a random number between two given numbers
@@ -232,10 +232,10 @@ var sort = (function(){
     
     function mergeSort(arr, left, right){
         console.log('-- IN MERGE');
-        if(typeof(left) === null){
+        if(typeof(left) === 'undefined'){
             left = 0
         }
-        if(typeof(right) === null){
+        if(typeof(right) === 'undefined'){
             right = arr.length() - 1;
         }
         if(left >= right){
@@ -247,7 +247,7 @@ var sort = (function(){
             mergeSort(arr, left, mid);
             mergeSort(arr, mid+1, right);
         }
-
+        console.log("left: " + left);
         var nextLeft = left;
         var nextRight = mid+1;
         var perm = [];
@@ -255,7 +255,7 @@ var sort = (function(){
             console.log('in choice');
             var choice = null;
             if(nextLeft <= mid && nextRight <= right){
-                if(arr.lessThan(nextleft, nextRight)){
+                if(arr.lessThan(nextLeft, nextRight)){
                     choice = 'L';
                 }else{
                     choice = 'R';
@@ -266,15 +266,18 @@ var sort = (function(){
                 choice = 'L'
             }
             if(choice === 'L'){
+                console.log("LEFT")
                 perm.push(nextLeft - left);
                 nextLeft++;
             } else if(choice === 'R'){
+                console.log("RIGHT")
                 perm.push(nextRight - left);
                 nextRight++;
             } else {
                 throw 'NO PERMUTATIONS'
             }
         }
+        console.log("PERM: " + perm)
         var swaps = permSwap(perm);
         for(var i = 0; i < swaps.length; i++){
             console.log('- SWAPING');
