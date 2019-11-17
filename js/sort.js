@@ -5,10 +5,7 @@
  *       several sorting algorithms
  ************************************/
 var sort = (function(){
-    function nl2br (str, is_xhtml) {
-        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
-        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
-     } 
+
 
     /* Colors Hex codes */
     const DEFAULT_COLOR = '#777';
@@ -25,6 +22,10 @@ var sort = (function(){
         return low + Math.floor((high - low + 1) * Math.random);
     }
 
+    function drawBorder(canvas){
+        var context = canvas.getContext('2d');
+        context.strokeRect(0,0, canvas.width, canvas.height);
+    }
     /*
     * Draws boxes to display given array with
     * Colors given
@@ -204,8 +205,7 @@ var sort = (function(){
     function permSwap(perm){
         console.log('PERM: ');
         console.log(perm);
-        if(!checkPerm(perm)){
-            console.log(perm);
+        if(checkPerm(perm)=== false){
             throw " Invalid permutaion"
         }
         var size = perm.length;
@@ -214,7 +214,6 @@ var sort = (function(){
             used.push(false);
         }
         var trans = [];
-
         for(var i = 0; i < size; i++){
             if(used[i]) continue
             var curr = i;
@@ -297,7 +296,7 @@ var sort = (function(){
         'bubble': 'Bubble sort is a basic sorting algorithm that loops through the array twice comparing the current item and the next item. if the next item is smaller, it will swap the two values. It runs in O(n^2) as we loop through the array n(n-1)/2 times time and O(1) space complexity as we only need to store the array and a temp variable',
     }
 
-    var bubble = "BubbleSort(array): for i to n \nfor j to n-i-1 \n    if array[j] > arr[j+1] \n      swap(array[j] ,array[j+1]";
+    var bubble = "BubbleSort(array): \n  for i to n: \n    for j to n-i-1: \n     if array[j] > arr[j+1] \n      swap(array[j] ,array[j+1])";
     var code = {
         'bubble': bubble.toString(),
     }
@@ -318,6 +317,7 @@ var sort = (function(){
     }
 
     return {
+        'drawBorder': drawBorder,
         'animateArr': animateArr,
         'getAlgo': getAlgo,
         'getExplaination': getExplaination,
