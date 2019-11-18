@@ -299,12 +299,15 @@ var sort = (function(){
         'bubble': 'Bubble sort is a basic sorting algorithm that loops through the array twice comparing the current item and the next item. if the next item is smaller, it will swap the two values. It runs in average O(n^2) as we loop through the array n(n-1)/2 times time and O(1) space complexity as we only need to store the array and a temp variable',
         'selection': 'Selection sort sorts by repeatedly finding the minimum element from the array and putting it at the beggining. This way it selects the element to put in the beggining. it has O(n^2) average time complexity.',
         'insertion': 'Insertion sort builds a final array one item at a time. It iterates through the array looking for where the element should be inserted one at a time. It has O(n^2) average time complexity',
-        'merge': 'Merge sort is a divide and conquer algorithm that divides the array into several sub arrays, sorts those, and then merges them back together. This is done recursivly, and as such has an O(logn) time complexity. ',
+        'merge': 'Merge sort is a divide and conquer algorithm that divides the array into several sub arrays, sorts those, and then merges them back together. This is done recursivly, and as such has an O(nlogn) time complexity. ',
     }
 
     var bubble = "BubbleSort(array): \n  for i to n: \n    for j to n-i-1: \n     if array[j] > arr[j+1] \n      swap(array[j] ,array[j+1])";
     var code = {
         'bubble': bubble.toString(),
+        'selection': 'SelectionSort(array): \n   for i = 1 to n - 1: \n     min = i \n     for j = i+1 to n: \n       if array[j] < list[min] then \n           min = j \n        if indexMin != i then \n          swap(list[min], list[i]',
+        'insertion': 'InsertionSort(array): \n   for j = 2 to n: \n     key = array[j] \n      insert array[j] \n     i = j - 1\n     while i > 0 and array[i] > key:\n       do array[i+1] = array[i]\n        i = i -1 \n     array[i+1] = key',
+        'merge': 'MergeSort(array, left, right): \n    if left > right\n     return\n    mid = (left + right)/2\n    MergeSort(array, left, mid);\n    MergeSort(array, mid+1, right);\n    Merge(array, left, mid, right)',
     }
 
     /* 
