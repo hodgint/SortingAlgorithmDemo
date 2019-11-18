@@ -11,19 +11,15 @@ var sort = (function(){
     const DEFAULT_COLOR = '#777';
     const SWAP_COLOR = '#FF0000';
     const COMPARE_COLOR = '#008000';
+    var timer = 0;
+    let stillTiming = false;
 
     /*
-    * Returns a random number between two given numbers
-    * Inputs:
-    * - high: highest the random number can be
-    * - low: lowest the random number can be
+    * Draws a border around the perimeter of the canvas
+    * - canvas: DOM object for a canvas to draw on
     */
-    function randInt(high, low){
-        return low + Math.floor((high - low + 1) * Math.random);
-    }
-
     function drawBorder(canvas){
-        var context = canvas.getContext('2d');
+        let context = canvas.getContext('2d');
         context.strokeRect(0,0, canvas.width, canvas.height);
     }
     /*
@@ -31,35 +27,35 @@ var sort = (function(){
     * Colors given
     * Inputs:
     * - arr: an array of numbers
-    * - canvas: DOM object where to draw
+    * - canvas: DOM object for a canvas to draw on
     * - colors: array of strings. ith 
     * element is the color of the ith element in arr.
     */
    function drawArray(arr, canvas, colors){
         /* canvas setup */
-        var context = canvas.getContext('2d');
-        var width = 2;
-        var size = arr.length;
-        var spacing = canvas.width / ( width * size + size + 1);
-        var barWidth = spacing * width; 
+        let context = canvas.getContext('2d');
+        let width = 2;
+        let size = arr.length;
+        let spacing = canvas.width / ( width * size + size + 1);
+        let barWidth = spacing * width; 
         
         context.clearRect(0,0, canvas.width, canvas.height);
         /* find min/max */
-        var min = arr[0];
-        var max = arr[0];
-        for(var i = 0; i < size; i++){
+        let min = arr[0];
+        let max = arr[0];
+        for(let i = 0; i < size; i++){
             min = arr[i] < min ? arr[i] : min;
             max = arr[i] > max ? arr[i] : max;
         }
 
         /* utility function  to bounds y to between 0 and canvas height */
        function boundY(y){
-           var a = canvas.height / (min - max);
-           var b = canvas.height / (max - min);
+           let a = canvas.height / (min - max);
+           let b = canvas.height / (max - min);
            return a * y + b;
        }
 
-       var yZero = boundY(0);
+       let yZero = boundY(0);
        context.beginPath();
        context.moveTo(0, yZero);
        context.lineTo(canvas.width, yZero);
@@ -69,10 +65,10 @@ var sort = (function(){
         context.strokeRect(0,0, canvas.width, canvas.height);
   
         /* draw boxes */
-        var x = spacing;
-        for(var i = 0; i < arr.length; i++){
+        let x = spacing;
+        for(let i = 0; i < arr.length; i++){
             context.fillStyle = colors[i];
-            var y = boundY(arr[i]);
+            let y = boundY(arr[i]);
             context.fillRect(x, y, barWidth, yZero - y)
             x  += spacing + barWidth
         }
@@ -84,18 +80,19 @@ var sort = (function(){
     * - arr: an array of numbers
     * - canvas: DOM object where we draw
     */
-    function animateArr(arr, canvas, interval){
+    function animateArr(arr, canvas, interval, timerObj){
         this._arr = arr;
         this._canvas = canvas;
         this._displayArr = [];
         this._colors = [];
         this._actions = [];
-        for(var i = 0; i < arr.length; i++){
+        for(let i = 0; i < arr.length; i++){
             this._displayArr.push(arr[i]);
             this._colors.push(DEFAULT_COLOR);
         }
         drawArray(this._arr, this._canvas, this._colors);
-        var _this = this;
+        let _this = this;
+        timer = 0;
         this._id = window.setInterval(function() {_this._step();}, interval);
 
         /* Utility functions */
@@ -107,7 +104,7 @@ var sort = (function(){
         }
         animateArr.prototype.swap = function(i, j){
             this._actions.push(['swap', i, j]);
-            var t = this._arr[i];
+            let t = this._arr[i];
             this._arr[i] = this._arr[j]
             this._arr[j] = t;
         }
@@ -124,15 +121,19 @@ var sort = (function(){
         animateArr.prototype._step = function(){
             if(this._actions.length === 0){
                 drawArray(this._displayArr, this._canvas, this._colors);
+                clearInterval(this._id);
+                stillTiming = false;
                 return;
             }
-            var action = this._actions.shift();
-            var i = action[1];
-            var j = action[2];
+            stillTiming = true;
+            timer = timer + interval;
+            let action = this._actions.shift();
+            let i = action[1];
+            let j = action[2];
             if(action[0] === 'swap'){
                 this._colors[i] = SWAP_COLOR;
                 this._colors[j] = SWAP_COLOR;
-                var temp = this._displayArr[i];
+                let temp = this._displayArr[i];
                 this._displayArr[i] = this._displayArr[j];
                 this._displayArr[j] = temp;  
             } else if (action[0] === 'compare'){
@@ -151,9 +152,9 @@ var sort = (function(){
     * - arr: an array of numbers
     */
    function bubbleSort(arr) {
-        var size = arr.length();
-        for(var i = 0; i < size; i++){
-            for(var j = 0; j < size - i - 1; j++){
+        let size = arr.length();
+        for(let i = 0; i < size; i++){
+            for(let j = 0; j < size - i - 1; j++){
                 if(arr.lessThan(j+1, j)){
                     arr.swap(j, j+1);
                 }
@@ -161,11 +162,15 @@ var sort = (function(){
         }
     }
 
+    /*
+    * Sorts given array using selection sort
+    * - arr: an array of numbers
+    */
     function selectionSort(arr){
-        var size = arr.length();
-        for(var i = 0; i < size - 1; i++){
-            var minJ = i;
-            for(var j = i; j < size; j++){
+        let size = arr.length();
+        for(let i = 0; i < size - 1; i++){
+            let minJ = i;
+            for(let j = i; j < size; j++){
                 if(arr.lessThan(j, minJ)){
                     minJ = j;
                 }
@@ -174,26 +179,33 @@ var sort = (function(){
         }
     }
 
+    /*
+    * Sorts given array using insertion sort
+    * - arr: an array of numbers
+    */
     function insertionSort(arr){
-        var size = arr.length();
-        for(var i = 1; i < size; i++){
-           for(var j = i; j > 0 && arr.lessThan(j, j-1); j--){
+        let size = arr.length();
+        for(let i = 1; i < size; i++){
+           for(let j = i; j > 0 && arr.lessThan(j, j-1); j--){
                 arr.swap(j, j-1);
             } 
         }
     }
 
-
+    /*
+    * checks for a valid permutation
+    * - perm: list of permutations
+    */
     function checkPerm(perm){
-        var size = perm.length;
-        var used = {};
-        for(var i = 0; i < size; i++){
+        let size = perm.length;
+        let used = {};
+        for(let i = 0; i < size; i++){
             if(used[perm[i]]){
                 return false;
             }
             used[perm[i]] = true;
         }
-        for(var i = 0; i < size; i++){
+        for(let i = 0; i < size; i++){
             if(!used[i]){
                 return false;
             }
@@ -201,22 +213,23 @@ var sort = (function(){
         return true;
     }
 
-    /* Permutation to transpositions */
+    /* 
+    * Permutation to list of transpositions 
+    * - perm: list of permutations 
+    */
     function permSwap(perm){
-        console.log('PERM: ');
-        console.log(perm);
         if(checkPerm(perm)=== false){
             throw " Invalid permutaion"
         }
-        var size = perm.length;
-        var used = [];
-        for(var i = 0; i < size; i++){
+        let size = perm.length;
+        let used = [];
+        for(let i = 0; i < size; i++){
             used.push(false);
         }
-        var trans = [];
-        for(var i = 0; i < size; i++){
+        let trans = [];
+        for(let i = 0; i < size; i++){
             if(used[i]) continue
-            var curr = i;
+            let curr = i;
             if(perm[i] == i){
                 used[i] = true;
             }
@@ -230,8 +243,13 @@ var sort = (function(){
 
     }
     
+    /*
+    * Sorts given array using merge sort
+    * - arr: an array of numbers
+    * - left: left index of the given array
+    * - right: right index of the given array
+    */
     function mergeSort(arr, left, right){
-        console.log('-- IN MERGE');
         if(typeof(left) === 'undefined'){
             left = 0
         }
@@ -242,18 +260,16 @@ var sort = (function(){
             return
         }
 
-        var mid = Math.floor((left + right) / 2);
+        let mid = Math.floor((left + right) / 2);
         if(right - left > 1){
             mergeSort(arr, left, mid);
             mergeSort(arr, mid+1, right);
         }
-        console.log("left: " + left);
-        var nextLeft = left;
-        var nextRight = mid+1;
-        var perm = [];
-        for(var i = left; i <= right; i++){
-            console.log('in choice');
-            var choice = null;
+        let nextLeft = left;
+        let nextRight = mid+1;
+        let perm = [];
+        for(let i = left; i <= right; i++){
+            let choice = null;
             if(nextLeft <= mid && nextRight <= right){
                 if(arr.lessThan(nextLeft, nextRight)){
                     choice = 'L';
@@ -266,21 +282,17 @@ var sort = (function(){
                 choice = 'L'
             }
             if(choice === 'L'){
-                console.log("LEFT")
                 perm.push(nextLeft - left);
                 nextLeft++;
             } else if(choice === 'R'){
-                console.log("RIGHT")
                 perm.push(nextRight - left);
                 nextRight++;
             } else {
                 throw 'NO PERMUTATIONS'
             }
         }
-        console.log("PERM: " + perm)
-        var swaps = permSwap(perm);
-        for(var i = 0; i < swaps.length; i++){
-            console.log('- SWAPING');
+        let swaps = permSwap(perm);
+        for(let i = 0; i < swaps.length; i++){
             arr.swap(swaps[i][0] + left, swaps[i][1] + left);
         }
     }
@@ -288,23 +300,28 @@ var sort = (function(){
     /*
     * Stores references to each sort algorithm
     */
-    var algorithms = {
+    let algorithms = {
         'bubble': bubbleSort,
         'selection': selectionSort,
         'insertion': insertionSort,
         'merge': mergeSort,
     }
 
-    var explaination = {
+    /*
+    * Stores strings explaining each algorithm
+    */
+    let explaination = {
         'bubble': 'Bubble sort is a basic sorting algorithm that loops through the array twice comparing the current item and the next item. if the next item is smaller, it will swap the two values. It runs in average O(n^2) as we loop through the array n(n-1)/2 times time and O(1) space complexity as we only need to store the array and a temp variable',
         'selection': 'Selection sort sorts by repeatedly finding the minimum element from the array and putting it at the beggining. This way it selects the element to put in the beggining. it has O(n^2) average time complexity.',
         'insertion': 'Insertion sort builds a final array one item at a time. It iterates through the array looking for where the element should be inserted one at a time. It has O(n^2) average time complexity',
         'merge': 'Merge sort is a divide and conquer algorithm that divides the array into several sub arrays, sorts those, and then merges them back together. This is done recursivly, and as such has an O(nlogn) time complexity. ',
     }
 
-    var bubble = "BubbleSort(array): \n  for i to n: \n    for j to n-i-1: \n     if array[j] > arr[j+1] \n      swap(array[j] ,array[j+1])";
-    var code = {
-        'bubble': bubble.toString(),
+    /*
+    * Stores strings with pseudo code for each algorithm
+    */
+    let code = {
+        'bubble': "BubbleSort(array): \n  for i to n: \n    for j to n-i-1: \n     if array[j] > arr[j+1] \n      swap(array[j] ,array[j+1])",
         'selection': 'SelectionSort(array): \n   for i = 1 to n - 1: \n     min = i \n     for j = i+1 to n: \n       if array[j] < list[min] then \n           min = j \n        if indexMin != i then \n          swap(list[min], list[i]',
         'insertion': 'InsertionSort(array): \n   for j = 2 to n: \n     key = array[j] \n      insert array[j] \n     i = j - 1\n     while i > 0 and array[i] > key:\n       do array[i+1] = array[i]\n        i = i -1 \n     array[i+1] = key',
         'merge': 'MergeSort(array, left, right): \n    if left > right\n     return\n    mid = (left + right)/2\n    MergeSort(array, left, mid);\n    MergeSort(array, mid+1, right);\n    Merge(array, left, mid, right)',
@@ -314,24 +331,41 @@ var sort = (function(){
     * Gets the sorting algorithm 
     */
     function getAlgo(algo){
-        var sort = algorithms[algo]
+        let sort = algorithms[algo]
         return sort; 
     }
 
+    /*
+    * Gets the explanation for the given algorithm
+    */
     function getExplaination(alg){
         return explaination[alg]
     }
+
+    /*
+    * Gets the pseudo code for the given algorithm
+    */
     function getCode(alg){
         return code[alg]
     }
 
+    function getTime(){
+        return timer;
+    }
+
+    function getStillTiming(){
+        return stillTiming;
+    }
     return {
         'drawBorder': drawBorder,
         'animateArr': animateArr,
         'getAlgo': getAlgo,
         'getExplaination': getExplaination,
         'getCode': getCode,
+        'getTime': getTime,
+        'getStillTiming': getStillTiming,
         'algorithms': algorithms,
+
     }
     return _sort;
 })();
