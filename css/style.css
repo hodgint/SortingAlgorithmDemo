@@ -1,0 +1,15 @@
+#sidebar {
+  padding: 20px;
+}
+
+#explanation {
+  width: 800px;
+}
+
+#psuedoTitle {
+  text-decoration: underline;
+}
+
+#main-canvas {
+  padding-top: 5px;
+}
